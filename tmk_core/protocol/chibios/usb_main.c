@@ -25,8 +25,9 @@
  *   makes the assumption this is safe to avoid littering with preprocessor directives.
  */
 
-#include <ch.h>
-#include <hal.h>
+#include "ch.h"
+#include "hal.h"
+#include "kint36.h"
 
 #include "usb_main.h"
 
@@ -671,7 +672,10 @@ void kbd_in_cb(USBDriver *usbp, usbep_t ep) {
 /* start-of-frame handler
  * TODO: i guess it would be better to re-implement using timers,
  *  so that this is not going to have to be checked every 1ms */
-void kbd_sof_cb(USBDriver *usbp) { (void)usbp; }
+void kbd_sof_cb(USBDriver *usbp) {
+    (void)usbp;
+    measurement.sof = DWT->CYCCNT;
+}
 
 /* Idle requests timer code
  * callback (called from ISR, unlocked state) */
